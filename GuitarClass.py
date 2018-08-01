@@ -83,6 +83,37 @@ class Guitar:
          raise Exception("Item de Tablatura inválido", itemTab)
       return [self.cordas[_idx].toca(itemTab[_idx]) for _idx in range(len(itemTab)) ] 
       
+   def ObtemAcorde(self, notaFundamental=NotaCromatica("A"), tipoAcorde="M"):
+      NOTA_FUNDAMENTAL = 0 #Sem deslocamento
+      TERCA_MENOR = 3 #1 Tons e um Semi Tom
+      TERCA_MAIOR = 4 #2 Tons
+      QUINTA_DIMINUTA = 6
+      QUINTA_JUSTA = 7 #3 Tons e um Semi Tom
+      QUINTA_AUMENTADA = 8 #4 Tons
+      ACORDE_MAIOR = "M" 
+      ACORDE_MENOR = "m"
+      ACORDE_AUMENTADO = "aum"
+      ACORDE_DOMINUTO = "dim"
+      dictAcordes = { 
+         ACORDE_MAIOR : [NOTA_FUNDAMENTAL, TERCA_MAIOR, QUINTA_JUSTA] ,
+         ACORDE_MENOR : [NOTA_FUNDAMENTAL, TERCA_MENOR, QUINTA_JUSTA] ,
+         ACORDE_AUMENTADO : [NOTA_FUNDAMENTAL, TERCA_MAIOR, QUINTA_AUMENTADA] ,
+         ACORDE_DOMINUTO : [NOTA_FUNDAMENTAL, TERCA_MENOR, QUINTA_DIMINUTA] ,
+      }
+      acorde = [] #Por padrão, será vazio
+      min_casas = 0 #Para mudar traste
+      max_casas = 4+min_casas #Tem a ver com os dedos
+      acordeInc = [notaFundamental.soma(item) for item in dictAcordes[tipoAcorde] ] #Obtenho os deslocamentos possiveis - Nem usei
+
+      #if len([n for n in notas1 if n not in notas2]) == 0: #Aí sim
+      for corda in range(len(self.cordas)):
+         casasCandidatas = [x for x in range(min_casas,max_casas) for y in dictAcordes[tipoAcorde] if notaFundamental.soma(y)==self.cordas[corda].toca(x)]
+         if len(casasCandidatas) == 1:
+            acorde.append( casasCandidatas[0] ) #Pego apenas o primeiro
+         else:
+            raise Exception("Erro na HARMONIZAÇÃO do acorde", acorde, corda, max_casas, notaFundamental, tipoAcorde, casasCandidatas )
+      return acorde #[0, 2, 2, 2, 0, -1]
+      
 if __name__ == '__main__':
    g = Guitar("Guitarra")
    g.toca([0, 0, 0, 0, 0, 0])
