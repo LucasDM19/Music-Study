@@ -62,7 +62,7 @@ class Corda():
       self.maximoCasas = _maximoCasas
    
    def toca(self, _casa):
-      if(_casa <0 or _casa > self.maximoCasas):
+      if(_casa <-2 or _casa > self.maximoCasas):
          raise Exception("Casa inválida", _casa)
       return self.notaCorda.soma(_casa) 
            
@@ -83,7 +83,7 @@ class Guitar:
          raise Exception("Item de Tablatura inválido", itemTab)
       return [self.cordas[_idx].toca(itemTab[_idx]) for _idx in range(len(itemTab)) ] 
       
-   def ObtemAcorde(self, notaFundamental=NotaCromatica("A"), tipoAcorde="M"):
+   def ObtemAcorde(self, notaFundamental=NotaCromatica("A"), tipoAcorde="M", capo=0):
       NOTA_FUNDAMENTAL = 0 #Sem deslocamento
       TERCA_MENOR = 3 #1 Tons e um Semi Tom
       TERCA_MAIOR = 4 #2 Tons
@@ -101,7 +101,7 @@ class Guitar:
          ACORDE_DOMINUTO : [NOTA_FUNDAMENTAL, TERCA_MENOR, QUINTA_DIMINUTA] ,
       }
       acorde = [] #Por padrão, será vazio
-      min_casas = 0 #Para mudar traste
+      min_casas = capo #Para mudar traste
       max_casas = 4+min_casas #Tem a ver com os dedos
       acordeInc = [notaFundamental.soma(item) for item in dictAcordes[tipoAcorde] ] #Obtenho os deslocamentos possiveis - Nem usei
 
@@ -112,6 +112,20 @@ class Guitar:
             acorde.append( casasCandidatas[0] ) #Pego apenas o primeiro
          else:
             raise Exception("Erro na HARMONIZAÇÃO do acorde", acorde, corda, max_casas, notaFundamental, tipoAcorde, casasCandidatas )
+      #Definindo nota grave do acorde = fundamental
+      ehNotaGrave = False #Por padrão, não tem o grave ainda
+      acordeGrave = [] #Vamos ver
+      for idx_casa in range(len(acorde)-1,-1,-1):
+         #print("i=", idx_casa, ehNotaGrave, acorde[idx_casa], acordeGrave, self.cordas[idx_casa].toca(acorde[idx_casa]), notaFundamental.soma(0) )
+         if self.cordas[idx_casa].toca(acorde[idx_casa]) == notaFundamental.soma(0) and ehNotaGrave==False: #Se é a nota fundamental
+            ehNotaGrave = True #Ativo apenas uma vez
+            acordeGrave.append(acorde[idx_casa])
+         elif ehNotaGrave==False : #Nota que não deve ser tocada
+            #acorde[idx_casa] == -1 #Deixa ela intocada
+            acordeGrave.append(-1)
+         else: #Só mantém
+            acordeGrave.append(acorde[idx_casa])
+      acorde = list(reversed(acordeGrave)) #Inverto?
       return acorde #[0, 2, 2, 2, 0, -1]
       
 if __name__ == '__main__':
