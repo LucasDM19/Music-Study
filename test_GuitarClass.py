@@ -42,7 +42,7 @@ class TestAcorde(unittest.TestCase):
    def testAcordesDiminutos(self):
       g = Guitar("Guitarra")
       a = g.ObtemAcorde(notaFundamental=NotaCromatica("C"), tipoAcorde="dim") #Obtendo acorde de Dó Aumentada
-      self.assertEqual( a, [0, 4, 2, 4, 3, -1], capo=2 ) #-1 indica que não é para tocar a Mizona
+      self.assertEqual( a, [0, 4, 2, 4, 3, -1], capo=1 ) #-1 indica que não é para tocar a Mizona
       
 if __name__ == '__main__':
     main()
