@@ -110,8 +110,11 @@ class Guitar:
          casasCandidatas = [x for x in range(min_casas,max_casas) for y in dictAcordes[tipoAcorde] if notaFundamental.soma(y)==self.cordas[corda].toca(x)]
          if len(casasCandidatas) == 1:
             acorde.append( casasCandidatas[0] ) #Pego apenas o primeiro
+         elif len(casasCandidatas) == 0: #Nao tem nada, então não toca
+            acorde.append( -1 )
          else:
-            raise Exception("Erro na HARMONIZAÇÃO do acorde", acorde, corda, max_casas, notaFundamental, tipoAcorde, casasCandidatas )
+            acorde.append( min(casasCandidatas) ) #Heurística: Se tiver mais de uma opção, pega a menor
+            #raise Exception("Erro na HARMONIZAÇÃO do acorde", acorde, corda, max_casas, notaFundamental, tipoAcorde, casasCandidatas )
       #Definindo nota grave do acorde = fundamental
       ehNotaGrave = False #Por padrão, não tem o grave ainda
       acordeGrave = [] #Vamos ver
