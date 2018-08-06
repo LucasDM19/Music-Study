@@ -74,10 +74,6 @@ class TestAcordeMenor(unittest.TestCase):
       
    def testAcordesMenoresF(self):
       g = Guitar("Guitarra")
-<<<<<<< HEAD
-      a = g.ObtemAcorde(notaFundamental=NotaCromatica("C"), tipoAcorde="dim") #Obtendo acorde de Dó Aumentada
-      self.assertEqual( a, [0, 4, 2, 4, 3, -1], capo=1 ) #-1 indica que não é para tocar a Mizona
-=======
       a = g.ObtemAcorde(notaFundamental=NotaCromatica("F"), tipoAcorde="m") 
       self.assertEqual( a, [1, 1, 1, 3, 3, 1] )   
       
@@ -97,7 +93,6 @@ class TestAcordeMenor(unittest.TestCase):
       # g = Guitar("Guitarra")
       # a = g.ObtemAcorde(notaFundamental=NotaCromatica("D"), tipoAcorde="dim", capo=4) #Obtendo acorde de Ré Aumentado
       # self.assertEqual( a, [-1, 5, 6, 7, 6, -1] ) #-1 indica que não é para tocar a Mizona
->>>>>>> 18e82ab014f8e47285a400202937f83049f5929a
       
 if __name__ == '__main__':
     main()
